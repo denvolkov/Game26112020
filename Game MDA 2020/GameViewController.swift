@@ -15,6 +15,11 @@ class GameViewController: UIViewController {
     let button = UIButton()
     
     // MARK: - Stored Properties
+    var score = 0 {
+        didSet {
+            print(#line, #function, score)
+        }
+    }
     var ship: SCNNode!
     var scene: SCNScene!
     var scnView: SCNView!
@@ -74,6 +79,7 @@ class GameViewController: UIViewController {
     
     @objc func newGame () {
         button.isHidden = true
+        score = 0
         ship = getShip()
         addShip()
     }
@@ -140,7 +146,7 @@ class GameViewController: UIViewController {
         scnView.addGestureRecognizer(tapGesture)
     
         // Add ship to the scene
-        let ship = getShip()
+        ship = getShip()
         addShip()
         
         // Add button
@@ -166,16 +172,14 @@ class GameViewController: UIViewController {
             
             // highlight it
             SCNTransaction.begin()
-            SCNTransaction.animationDuration = 0.5
+            SCNTransaction.animationDuration = 0.2
             
             // on completion - unhighlight
             SCNTransaction.completionBlock = {
-                SCNTransaction.begin()
-                SCNTransaction.animationDuration = 0.5
-                
-                material.emission.contents = UIColor.black
-                
-                SCNTransaction.commit()
+                self.score += 1
+                self.ship.removeFromParentNode()
+                self.ship = self.getShip()
+                self.addShip()
             }
             
             material.emission.contents = UIColor.red
