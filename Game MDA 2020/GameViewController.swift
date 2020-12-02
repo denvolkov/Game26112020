@@ -54,6 +54,8 @@ class GameViewController: UIViewController {
         
         // Add animation to move the ship to origin
         ship.runAction(.move(to: SCNVector3(), duration: 5)) {
+            print(#line, #function)
+            ship.removeFromParentNode()
             DispatchQueue.main.async {
                 self.button.isHidden = false
             }
